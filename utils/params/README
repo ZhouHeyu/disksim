@@ -1,0 +1,4 @@
+
+Here are some scripts that do most of the legwork of converting old
+DiskSim setups to the new (v3) format.  These are pretty rough and
+require hand-tweaking the output so YMMV.

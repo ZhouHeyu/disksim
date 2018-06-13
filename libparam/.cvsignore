@@ -1,0 +1,5 @@
+.__afs*
+lex.libparam.c
+libparam.tab.c
+libparam.tab.h
+.paths

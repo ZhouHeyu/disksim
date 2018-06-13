@@ -1,0 +1,4 @@
+.__afs*
+libdiskmodel.a
+.depend
+.paths

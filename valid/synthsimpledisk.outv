@@ -1,0 +1,434 @@
+
+*** Output file name: synthsimpledisk.outv
+*** Input trace format: ascii
+*** I/O trace used: 0
+*** Synthgen to be used?: 1
+
+disksim_global Global {
+   Init Seed = 42,
+   Real Seed = 42,
+   Stat definition file = statdefs
+} # end of Global spec
+
+disksim_stats Stats {
+   iodriver stats = disksim_iodriver_stats {
+      Print driver size stats = 1,
+      Print driver locality stats = 0,
+      Print driver blocking stats = 0,
+      Print driver interference stats = 0,
+      Print driver queue stats = 1,
+      Print driver crit stats = 1,
+      Print driver idle stats = 1,
+      Print driver intarr stats = 1,
+      Print driver streak stats = 1,
+      Print driver stamp stats = 1,
+      Print driver per-device stats = 1
+   },
+   bus stats = disksim_bus_stats {
+      Print bus idle stats = 1,
+      Print bus arbwait stats = 1
+   },
+   ctlr stats = disksim_ctlr_stats {
+      Print controller cache stats = 1,
+      Print controller size stats = 1,
+      Print controller locality stats = 1,
+      Print controller blocking stats = 1,
+      Print controller interference stats = 1,
+      Print controller queue stats = 1,
+      Print controller crit stats = 1,
+      Print controller idle stats = 1,
+      Print controller intarr stats = 1,
+      Print controller streak stats = 1,
+      Print controller stamp stats = 1,
+      Print controller per-device stats = 1
+   },
+   device stats = disksim_device_stats {
+      Print device queue stats = 1,
+      Print device crit stats = 0,
+      Print device idle stats = 0,
+      Print device intarr stats = 0,
+      Print device size stats = 0,
+      Print device seek stats = 1,
+      Print device latency stats = 1,
+      Print device xfer stats = 1,
+      Print device acctime stats = 1,
+      Print device interfere stats = 0,
+      Print device buffer stats = 1
+   },
+   process flow stats = disksim_pf_stats {
+      Print per-process stats = 1,
+      Print per-CPU stats = 1,
+      Print all interrupt stats = 1,
+      Print sleep stats = 1
+   }
+} # end of Stats spec
+
+disksim_iodriver DRIVER0 {
+   type = 1,
+   Constant access time = 0.000000,
+   Scheduler = disksim_ioqueue {
+      Scheduling policy = 3,
+      Cylinder mapping strategy = 1,
+      Write initiation delay = 0.000000,
+      Read initiation delay = 0.000000,
+      Sequential stream scheme = 0,
+      Maximum concat size = 0,
+      Overlapping request scheme = 0,
+      Sequential stream diff maximum = 0,
+      Scheduling timeout scheme = 1,
+      Timeout time/weight = 30,
+      Timeout scheduling = 3,
+      Scheduling priority scheme = 1,
+      Priority scheduling = 3
+   },
+   Use queueing in subsystem = 1
+} # end of DRIVER0 spec
+
+disksim_bus BUS0 {
+   type = 1,
+   Arbitration type = 1,
+   Arbitration time = 0.000000,
+   Read block transfer time = 0.000000,
+   Write block transfer time = 0.000000,
+   Print stats = 0
+} # end of BUS0 spec
+
+disksim_bus BUS1 {
+   type = 1,
+   Arbitration type = 1,
+   Arbitration time = 0.000000,
+   Read block transfer time = 0.000000,
+   Write block transfer time = 0.000000,
+   Print stats = 1
+} # end of BUS1 spec
+
+disksim_ctlr CTLR0 {
+   type = 1,
+   Scale for delays = 0.000000,
+   Bulk sector transfer time = 0.000000,
+   Maximum queue length = 0,
+   Print stats = 1
+} # end of CTLR0 spec
+
+disksim_simpledisk SD0 {
+   Block count = 100000,
+   Access time = 9.500000,
+   Command overhead = 0.500000,
+   Bus transaction latency = 0.000000,
+   Bulk sector transfer time = 0.000000,
+   Never disconnect = 0,
+   Print stats = 1,
+   Max queue length = 1,
+   Scheduler = disksim_ioqueue {
+      Scheduling policy = 1,
+      Cylinder mapping strategy = 0,
+      Write initiation delay = 0.000000,
+      Read initiation delay = 0.000000,
+      Sequential stream scheme = 0,
+      Maximum concat size = 0,
+      Overlapping request scheme = 0,
+      Sequential stream diff maximum = 0,
+      Scheduling timeout scheme = 0,
+      Timeout time/weight = 0,
+      Timeout scheduling = 0,
+      Scheduling priority scheme = 0,
+      Priority scheduling = 0
+   }
+} # end of SD0 spec
+
+instantiate [
+   statfoo
+] as Stats
+
+instantiate [
+   bus0
+] as BUS0
+
+instantiate [
+   sd0
+] as SD0
+
+instantiate [
+   bus1
+] as BUS1
+
+instantiate [
+   driver0
+] as DRIVER0
+
+instantiate [
+   ctlr0
+] as CTLR0
+
+topospec disksim_iodriver driver0 [
+   disksim_bus bus0 [
+      disksim_ctlr ctlr0 [
+         disksim_bus bus1 [
+            disksim_simpledisk sd0 []
+         ]
+      ]
+   ]
+]
+
+disksim_logorg org0 {
+   Addressing mode = Parts,
+   Distribution scheme = Asis,
+   Redundancy scheme = Noredun,
+   devices = [
+      sd0
+   ],
+   Stripe unit = 100000,
+   Synch writes for safety = 0,
+   Number of copies = 2,
+   Copy choice on read = 6,
+   RMW vs. reconstruct = 0.500000,
+   Parity stripe unit = 64,
+   Parity rotation type = 1,
+   Time stamp interval = 0.000000,
+   Time stamp start time = 60000.000000,
+   Time stamp stop time = 10000000000.000000,
+   Time stamp file name = stamps
+} # end of org0 spec
+
+disksim_pf Proc {
+   Number of processors = 5,
+   Process-Flow Time Scale = 1.000000
+} # end of Proc spec
+
+disksim_synthio Synthio {
+   Number of I/O requests to generate = 10000,
+   Maximum time of trace generated = 100000.000000,
+   System call/return with each request = 0,
+   Think time from call to request = 0.000000,
+   Think time from request to return = 0.000000,
+   Generators = [
+      disksim_synthgen {
+         Storage capacity per device = 100000,
+         devices = [
+            sd0
+         ],
+         Blocking factor = 8,
+         Probability of sequential access = 0.200000,
+         Probability of local access = 0.300000,
+         Probability of read access = 0.660000,
+         Probability of time-critical request = 0.200000,
+         Probability of time-limited request = 0.300000,
+         Time-limited think times = [
+            normal,
+            30.000000,
+            100.000000
+         ],
+         General inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Sequential inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local distances = [
+            normal,
+            0.000000,
+            40000.000000
+         ],
+         Sizes = [
+            exponential,
+            0.000000,
+            8.000000
+         ]
+      },
+      disksim_synthgen {
+         Storage capacity per device = 100000,
+         devices = [
+            sd0
+         ],
+         Blocking factor = 8,
+         Probability of sequential access = 0.200000,
+         Probability of local access = 0.300000,
+         Probability of read access = 0.660000,
+         Probability of time-critical request = 0.200000,
+         Probability of time-limited request = 0.300000,
+         Time-limited think times = [
+            normal,
+            30.000000,
+            100.000000
+         ],
+         General inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Sequential inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local distances = [
+            normal,
+            0.000000,
+            40000.000000
+         ],
+         Sizes = [
+            exponential,
+            0.000000,
+            8.000000
+         ]
+      },
+      disksim_synthgen {
+         Storage capacity per device = 100000,
+         devices = [
+            sd0
+         ],
+         Blocking factor = 8,
+         Probability of sequential access = 0.200000,
+         Probability of local access = 0.300000,
+         Probability of read access = 0.660000,
+         Probability of time-critical request = 0.200000,
+         Probability of time-limited request = 0.300000,
+         Time-limited think times = [
+            normal,
+            30.000000,
+            100.000000
+         ],
+         General inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Sequential inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local distances = [
+            normal,
+            0.000000,
+            40000.000000
+         ],
+         Sizes = [
+            exponential,
+            0.000000,
+            8.000000
+         ]
+      },
+      disksim_synthgen {
+         Storage capacity per device = 100000,
+         devices = [
+            sd0
+         ],
+         Blocking factor = 8,
+         Probability of sequential access = 0.200000,
+         Probability of local access = 0.300000,
+         Probability of read access = 0.660000,
+         Probability of time-critical request = 0.200000,
+         Probability of time-limited request = 0.300000,
+         Time-limited think times = [
+            normal,
+            30.000000,
+            100.000000
+         ],
+         General inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Sequential inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local distances = [
+            normal,
+            0.000000,
+            40000.000000
+         ],
+         Sizes = [
+            exponential,
+            0.000000,
+            8.000000
+         ]
+      },
+      disksim_synthgen {
+         Storage capacity per device = 100000,
+         devices = [
+            sd0
+         ],
+         Blocking factor = 8,
+         Probability of sequential access = 0.200000,
+         Probability of local access = 0.300000,
+         Probability of read access = 0.660000,
+         Probability of time-critical request = 0.200000,
+         Probability of time-limited request = 0.300000,
+         Time-limited think times = [
+            normal,
+            30.000000,
+            100.000000
+         ],
+         General inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Sequential inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local inter-arrival times = [
+            exponential,
+            0.000000,
+            50.000000
+         ],
+         Local distances = [
+            normal,
+            0.000000,
+            40000.000000
+         ],
+         Sizes = [
+            exponential,
+            0.000000,
+            8.000000
+         ]
+      }
+   ]
+} # end of Synthio spec
+
+loadparams complete
+Initialized synthio process #4, first event at time 68.231536
+Initialized synthio process #3, first event at time 34.537445
+Initialized synthio process #2, first event at time 38.175560
+Initialized synthio process #1, first event at time 96.611610
+Initialized synthio process #0, first event at time 40.728942
+Kicking off cpu #0
+First event occurs at time 68.231536
+Kicking off cpu #1
+First event occurs at time 34.537445
+Kicking off cpu #2
+First event occurs at time 38.175560
+Kicking off cpu #3
+First event occurs at time 96.611610
+Kicking off cpu #4
+First event occurs at time 40.728942
+Initialization complete

@@ -1,0 +1,19 @@
+# Script writer: Youngjae Kim (youkim@cse.,psu.edu)
+
+#!/bin/sh
+
+echo "Running Pagemap FTL..."
+../src/disksim pagemap.parv pagemap.outv ascii ./trace/test.file 0 
+grep "IOdriver Response time average:" pagemap.outv
+grep "IOdriver Response time std.dev." pagemap.outv
+
+echo "Running DFTL..."
+../src/disksim dftl.parv dftl.outv ascii ./trace/test.file 0
+grep "IOdriver Response time average:" dftl.outv
+grep "IOdriver Response time std.dev." dftl.outv
+
+echo "Running FAST..."
+../src/disksim fast.parv fast.outv ascii ./trace/test.file 0
+grep "IOdriver Response time average:" fast.outv
+grep "IOdriver Response time std.dev." fast.outv
+

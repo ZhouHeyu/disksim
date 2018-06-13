@@ -1,0 +1,57 @@
+
+cleanliness
+-----------
+- #ifdef RELEASE_ONLY  /* DELETE ME */
+- cleanup stuff from Quantum/Ross...
+- clean up disk.h/iosim.h/diskface.h interface for disk-exported functions
+- clean up ALPHA compilation
+- why diskacctime stuff in iosim.h ?
+- why mapping types in iosim.h ?
+- clean up initial malloc setup
+- fix Makefile to figure out inter-file dependencies automatically (bucy -- DONE 6/12/2001)
+- clean iotrace/iosim code scramble
+- fix-up iotrace/synthio support for having multiple traces
+  (perhaps all traces should be fed thru synthio??)
+- clean up checkpoint/restore/disksim code
+- deal with currdisk->maxqlen awkwardness (is it QueueLength or outstanding?)
+- replace global "device" structure (used by driver and ctlr) with "virtdev"
+  (to avoid confusion with _device.[ch] code)
+- fix Makefile and Makefile.ALL syncing problem for building with SimOS
+- robustness, testing harness, and a lot more testing
+
+
+documentation
+-------------
+- document new cache, cachemem, cachedev stuff
+- document common errors (see common.errors in doc/)
+- all the other stuff recently changed and added (freebw, mems, etc...)
+
+
+functionality
+-------------
+- implement ctlorgs
+- clean up freeblock scheduling integration
+- new interconnection scheme (better scalability and error reporting)
+- redo disk caching code (comprehensible and more up-to-date)
+- add a device_cleanup call to allow for memory garbage collection now
+  that we're using malloc instead of DISKSIM_malloc
+
+bug fixes
+---------
+- type "1" buses at top level when there are multiple levels of controllers
+
+
+questions
+---------
+- DiskSim ASPTF problem
+- look at diskctlr prefetch tracking
+- look at diskctlr seek, rotation, etc breakdowns
+
+
+release changes
+---------------
+- remove MEMS, DEC, and other unready stuff from source code
+- remove doc.src, doc/Outline.txt and TODO
+- move latest doc.src/main.ps to doc/disksim-doc.ps
+- remove all CVS/ directories
+

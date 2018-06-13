@@ -1,0 +1,28 @@
+/* 
+ * Writer: Youngjae Kim (youkim@cse.psu.edu)
+ */
+
+1. Running simulator
+
+We have prepared a script to run the simulator using real block I/O trace
+in (./trace/test.file). You may test the simulator by typing  
+
+"./runtest"
+
+2. Setting flash type
+
+You can change the flash type in the parameter file. 
+Search for "FTL type = " in the parameter file. 
+  - 1 is for page-mapped FTL. 
+  - 3 is for DFTL. 
+  - 4 is for FAST FTL scheme. 
+
+3. Adjust the capacity of flash
+
+You can change total number of blocks in flash. 
+Search for "Block count = " in the parameter file. 
+We have set the block size 128KB. 
+Similarly you can adjust extra number of block in flash. 
+This is extra space which is not counted as unique data blocks in the flash. 
+
+

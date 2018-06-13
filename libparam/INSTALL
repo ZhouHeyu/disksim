@@ -1,0 +1,5 @@
+
+1.  Grab libddbg and build.
+2.  Copy '.paths.in' to '.paths' and edit to reflect the locations of
+the packages from step 1.
+3.  Run make

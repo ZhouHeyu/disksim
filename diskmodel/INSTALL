@@ -1,0 +1,9 @@
+
+These instructions are for building diskmodel outside of a shrinkwrapped
+DiskSim release.
+
+1.  Grab libtrace and libparam and build them.
+2.  Copy '.paths.in' to '.paths' and edit to reflect the locations of
+the packages from step 1.
+3.  Run make
+
